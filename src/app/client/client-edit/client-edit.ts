@@ -20,6 +20,7 @@ export class ClientEdit implements OnInit {
 
     protected readonly id = signal<number | null>(null);
     protected readonly name = signal<string | null>(null);
+    protected readonly errorMessage = signal<string | null>(null);
 
     ngOnInit(): void {
         this.loadFormData(this.data.client ?? null);
@@ -34,13 +35,16 @@ export class ClientEdit implements OnInit {
         const id = this.id();
         const name = this.name();
 
+        this.errorMessage.set(null);
+
         if(!name) {
             return;
         }
 
         const client = { id, name } as Client;
-        this.clientService.saveClient(client).subscribe(() => {
-            this.dialogRef.close(true);
+        this.clientService.saveClient(client).subscribe({
+            next: () => this.dialogRef.close(),
+            error: () => this.errorMessage.set('No se pudo guardar el cliente. Puede que ya exista un cliente con ese nombre'),
         });
     }
 
