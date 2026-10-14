@@ -20,6 +20,6 @@ export class ClientService {
     }
 
     deleteClient(idClient : number): Observable<any> {
-        return this.http.get<Client[]>(this.baseUrl);
+        return this.http.delete(`${this.baseUrl}/${idClient}`);
     }
 }
