@@ -1,0 +1,57 @@
+<div class="container">
+    <h1>Listado de Préstamos</h1>
+
+    <div class="filters">
+        <form>
+            <mat-form-field>
+                <mat-label>Juego</mat-label>
+                <mat-select disableRipple [(ngModel)]="filterGame" name="game">
+                    @for (game of games(); track game.id) {
+                        <mat-option [value]="game">{{ game.title }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Cliente</mat-label>
+                <mat-select disableRipple [(ngModel)]="filterClient" name="client">
+                    @for (client of clients(); track client.id) {
+                        <mat-option [value]="client">{{ client.name }}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+            <!-- Add filters for dates -->
+        </form>
+
+        <div class="buttons">
+            <button mat-stroked-button (click)="onCleanFilter()">Limpiar</button>
+            <button mat-stroked-button (click)="onSearch()">Filtrar</button>
+        </div>
+    </div>
+
+    <mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef> Identificador  </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+        </ng-container>
+
+        <!-- Add columns for game, client and dates-->
+
+        <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <button mat-icon-button color="accent" (click)="deleteBorrowing(element)">
+                    <mat-icon>clear</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+        <mat-row *marRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <mat-paginator (page)="loadPage($event)" [pageSizeOptions]="[5,10,20]" [pageIndex]="pageNumber" [pageSize]="pageSize" [length]="totalElements" showFirstLastButtons></mat-paginator>
+
+    <div class="buttons">
+        <button mat-flat-button color="primary" (click)="createBorrowing()">Nuevo préstamo</button>
+    </div>
+</div>
