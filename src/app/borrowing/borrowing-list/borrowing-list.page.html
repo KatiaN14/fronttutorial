@@ -21,21 +21,16 @@
             </mat-form-field>
             
             <mat-form-field>
-                <mat-label>Fecha</mat-label>
-                <input
-                    type="date"
-                    matInput
-                    placeholder="Fecha"
-                    [(ngModel)]="filterDate"
-                    name="borrowingDate"
-                />
+                <input matInput [matDatepicker]="myDatepicker">
+                <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #myDatepicker></mat-datepicker>
             </mat-form-field>
         
         </form>
 
         <div class="buttons">
             <button mat-stroked-button (click)="onCleanFilter()">Limpiar</button>
-            <button mat-stroked-button (click)="onSearch()">Filtrar</button>
+            <button mat-flat-button color="primary" (click)="onSearch()">Filtrar</button>
         </div>
     </div>
 
