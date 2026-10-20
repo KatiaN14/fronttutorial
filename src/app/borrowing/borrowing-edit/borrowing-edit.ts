@@ -4,7 +4,7 @@ import { MatSelect } from '@angular/material/select';
 import {Borrowing} from '../model/borrowing';
 import { Game } from '../../game/model/game';
 import { Client } from '../../client/model/client';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { BorrowingService } from '../borrowing.service';
 import { GameService } from '../../game/game.service';
 import { ClientService } from '../../client/client.service';
@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { validateFields } from '../../core/helpers/validation.helper';
+import { DialogConfirmation } from '../../core/dialog-confirmation/dialog-confirmation';
 
 @Component({
   imports: [
@@ -25,13 +26,13 @@ import { validateFields } from '../../core/helpers/validation.helper';
     MatSelectModule
   ],
   standalone: true,
-  selector: 'app-borrowing-create',
-  styleUrl: './borrowing-create.scss',
-  templateUrl: './borrowing-create.html',
+  selector: 'app-borrowing-edit',
+  styleUrl: './borrowing-edit.scss',
+  templateUrl: './borrowing-edit.html',
 })
-export class BorrowingCreate implements OnInit {
+export class BorrowingEdit implements OnInit {
   protected readonly borrowingService = inject(BorrowingService);
-  protected readonly dialogRef = inject(MatDialogRef<BorrowingCreate>);
+  protected readonly dialogRef = inject(MatDialogRef<BorrowingEdit>);
   protected readonly data = inject(MAT_DIALOG_DATA);
   protected readonly gameService = inject(GameService);
   protected readonly clientService = inject(ClientService);
@@ -43,6 +44,9 @@ export class BorrowingCreate implements OnInit {
   protected readonly clients = signal<Client[]>([]);
   protected readonly startDate = signal<Date | null>(null);
   protected readonly endDate = signal<Date | null>(null);
+
+  protected readonly errorMessage = signal<string | null>(null);
+  protected readonly dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.loadFormData(this.data.borrowing ?? null);
@@ -74,6 +78,8 @@ export class BorrowingCreate implements OnInit {
     const requiredFields = ["gameId", "clientId", "startDate", "endDate"] as const;
     const data = { gameId, clientId, startDate, endDate };
 
+    this.errorMessage.set(null);
+
     if (!validateFields(data, requiredFields)) {
       return;
     }
@@ -85,8 +91,14 @@ export class BorrowingCreate implements OnInit {
       startDate,
       endDate,
     } as Borrowing;
-    this.borrowingService.saveBorrowing(borrowing).subscribe(() => {
-      this.dialogRef.close(true);
+    this.borrowingService.saveBorrowing(borrowing).subscribe({
+      next: () => this.dialogRef.close(true),
+      error: () => this.dialog.open(DialogConfirmation, {
+        data: {
+          title: 'Error al guardar',
+          message: 'No se pudo guardar el préstamo.',
+        }
+      })
     });
   }
 

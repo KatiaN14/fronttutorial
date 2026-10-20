@@ -19,7 +19,18 @@
                     }
                 </mat-select>
             </mat-form-field>
-            <!-- Add filters for dates -->
+            
+            <mat-form-field>
+                <mat-label>Fecha</mat-label>
+                <input
+                    type="date"
+                    matInput
+                    placeholder="Fecha"
+                    [(ngModel)]="filterDate"
+                    name="borrowingDate"
+                />
+            </mat-form-field>
+        
         </form>
 
         <div class="buttons">
@@ -34,11 +45,32 @@
             <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
         </ng-container>
 
-        <!-- Add columns for game, client and dates-->
+        <ng-container matColumnDef="game">
+            <mat-header-cell *matHeaderCellDef> Juego  </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.game.title}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="client">
+            <mat-header-cell *matHeaderCellDef> Cliente  </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.client.name}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="startDate">
+            <mat-header-cell *matHeaderCellDef> Fecha de préstamo  </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.startDate | date}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="endDate">
+            <mat-header-cell *matHeaderCellDef> Fecha de devolución  </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.endDate | date}} </mat-cell>
+        </ng-container>
 
         <ng-container matColumnDef="action">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="editBorrowing(element)">
+                    <mat-icon>edit</mat-icon>
+                </button>
                 <button mat-icon-button color="accent" (click)="deleteBorrowing(element)">
                     <mat-icon>clear</mat-icon>
                 </button>
@@ -46,7 +78,7 @@
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
-        <mat-row *marRowDef="let row; columns: displayedColumns;"></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
 
     <mat-paginator (page)="loadPage($event)" [pageSizeOptions]="[5,10,20]" [pageIndex]="pageNumber" [pageSize]="pageSize" [length]="totalElements" showFirstLastButtons></mat-paginator>

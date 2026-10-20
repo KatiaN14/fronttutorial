@@ -8,7 +8,7 @@
         </mat-form-field>
 
         <mat-form-field>
-            <matlabel>Juego</matlabel>
+            <mat-label>Juego</mat-label>
             <mat-select disableRipple [(ngModel)]="gameId" name="game" required>
                 @for (game of games(); track game.id) {
                     <mat-option [value]="game.id">{{game.title}}</mat-option>
