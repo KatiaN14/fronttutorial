@@ -44,16 +44,11 @@ export class ClientEdit implements OnInit {
         }
 
         const client = { id, name } as Client;
-        this.clientService.saveClient(client).subscribe({
-            next: () => this.dialogRef.close(true),
-            error: () => this.dialog.open(DialogConfirmation, {
-                data: {
-                    title: 'Error al guardar',
-                    message: 'No se pudo guardar el cliente. Puede que ya exista un cliente con ese nombre',
-                }
-            })
+        this.clientService.saveClient(client).subscribe(() => {
+            this.dialogRef.close(true);
         });
     }
+
 
     onClose() {
         this.dialogRef.close();

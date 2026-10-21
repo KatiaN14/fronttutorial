@@ -43,7 +43,7 @@ export class BorrowingListPage implements OnInit{
   protected readonly clients = signal<Client[]>([]);
   protected readonly filterGame = signal<Game | null>(null);
   protected readonly filterClient = signal<Client | null>(null);
-  protected readonly filterDate = signal<string | null>(null);
+  protected readonly filterDate = signal<Date | null>(null);
 
   protected readonly borrowingService = inject(BorrowingService);
   protected readonly gameService = inject(GameService);
@@ -58,13 +58,12 @@ export class BorrowingListPage implements OnInit{
   displayedColumns: string[] = ['id', 'game', 'client','startDate', 'endDate', 'action'];
 
   ngOnInit(): void {
-    this.gameService.getGames().subscribe((games) => this.games.set(games));
-    this.clientService.getClients().subscribe((clients) => this.clients.set(clients));
-    this.borrowingService.getBorrowings({ pageNumber: this.pageNumber, pageSize: this.pageSize, sort: [] }).subscribe((data) => {
-      this.dataSource.data = data.content;
-      this.pageNumber = data.pageable.pageNumber;
-      this.pageSize = data.pageable.pageSize;
-      this.totalElements = data.totalElements;
+    this.gameService.getGames().subscribe((games) => {
+      this.games.set(games);
+    });
+
+    this.clientService.getClients().subscribe((clients) => {
+      this.clients.set(clients);
     });
     this.loadPage();
   }
@@ -79,7 +78,8 @@ export class BorrowingListPage implements OnInit{
   onSearch(): void {
     const gameId = this.filterGame() != null ? this.filterGame().id : null;
     const clientId = this.filterClient() != null ? this.filterClient().id : null;
-    const date = this.filterDate() != null ? this.filterDate() : null;
+    const d = this.filterDate();
+    const date = d != null ? `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}` : null;
     this.borrowingService.getBorrowings({ pageNumber: this.pageNumber, pageSize: this.pageSize, sort: [] }, gameId, clientId, date).subscribe((data) => {
       this.dataSource.data = data.content;
       this.pageNumber = data.pageable.pageNumber;
@@ -126,6 +126,10 @@ export class BorrowingListPage implements OnInit{
   editBorrowing(borrowing: Borrowing) {
     const dialogRef = this.dialog.open(BorrowingEdit, {
       data: { borrowing: borrowing },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.ngOnInit();
     });
   }
 
