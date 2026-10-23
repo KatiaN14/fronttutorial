@@ -1,13 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Client } from '../model/client';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+
+import { Client } from '../model/client';
 import { ClientEdit } from '../client-edit/client-edit';
 import { ClientService } from '../client.service';
 import { DialogConfirmation } from '../../core/dialog-confirmation/dialog-confirmation';
+import { DialogError } from '../../core/dialog-error/dialog-error';
 
 @Component({
     selector: 'app-client-list',
@@ -66,9 +68,15 @@ export class ClientListPage implements OnInit{
 
       dialogRef.afterClosed().subscribe(result => {
         if (result) {
-          this.clientService.deleteClient(client.id).subscribe(() => {
-            this.loadData();
-          });
+          this.clientService.deleteClient(client.id).subscribe({
+            next: () => this.loadData(),
+            error: (err) => this.dialog.open(DialogError, {
+              data: {
+                title: 'Error al eliminar',
+                description: err.error?.message ?? 'No se pudo eliminar el cliente.',
+              }
+            })
+          });  
         }
       });
     }

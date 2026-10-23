@@ -2,24 +2,25 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { BorrowingEdit } from '../borrowing-edit/borrowing-edit';
-import { BorrowingService } from '../borrowing.service';
-import { Borrowing } from '../model/borrowing';
-import { Pageable } from '../../core/model/page/pageable';
-import { DialogConfirmation } from '../../core/dialog-confirmation/dialog-confirmation';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { Game } from '../../game/model/game';
-import { GameService } from '../../game/game.service';  
-import { Client } from '../../client/model/client';
-import { ClientService } from '../../client/client.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+
+import { BorrowingEdit } from '../borrowing-edit/borrowing-edit';
+import { BorrowingService } from '../borrowing.service';
+import { Borrowing } from '../model/borrowing';
+import { Pageable } from '../../core/model/page/pageable';
+import { DialogConfirmation } from '../../core/dialog-confirmation/dialog-confirmation';
+import { Game } from '../../game/model/game';
+import { GameService } from '../../game/game.service';  
+import { Client } from '../../client/model/client';
+import { ClientService } from '../../client/client.service';
 
 @Component({
   imports: [

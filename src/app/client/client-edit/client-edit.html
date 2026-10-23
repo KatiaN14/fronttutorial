@@ -15,9 +15,6 @@
             <mat-label>Nombre</mat-label>
             <input type="text" matInput placeholder="Nombre de cliente" [(ngModel)]="name" name="name" required>
             <mat-error>El nombre no puede estar vacío</mat-error>
-            @if (errorMessage()) {
-                <mat-error>{{ errorMessage() }}</mat-error>
-            }
         </mat-form-field>
     </form>
 

@@ -26,8 +26,10 @@
     "@angular/build": "^22.2.1",
     "@angular/cli": "^22.2.1",
     "@angular/compiler-cli": "^22.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.7",
     "jsdom": "^30.0.0",
-    "prettier": "^3.8.1",
+    "prettier": "3.9.10",
     "typescript": "~6.0.2",
     "vitest": "^5.0.0"
   }

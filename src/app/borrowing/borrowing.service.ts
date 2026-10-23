@@ -1,11 +1,9 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Pageable } from '../core/model/page/pageable';
 import { Borrowing } from './model/borrowing';
 import { PaginatedData } from '../core/model/page/paginated-data';
-import { HttpClient } from '@angular/common/http';
-import { BORROWING_DATA_LIST } from './model/mock-borrowings-list';
-import { BORROWING_DATA } from './model/mock-borrowings';
 
 @Injectable({
     providedIn: 'root',

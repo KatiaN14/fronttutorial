@@ -1,12 +1,14 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialog } from '@angular/material/dialog';
-import { ClientService } from '../client.service';
-import { Client } from '../model/client';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { DialogConfirmation } from '../../core/dialog-confirmation/dialog-confirmation';
+
+import { ClientService } from '../client.service';
+import { Client } from '../model/client';
+import { DialogError } from '../../core/dialog-error/dialog-error';
+
 
 @Component({
     selector: 'app-client-edit',
@@ -21,7 +23,6 @@ export class ClientEdit implements OnInit {
 
     protected readonly id = signal<number | null>(null);
     protected readonly name = signal<string | null>(null);
-    protected readonly errorMessage = signal<string | null>(null);
     protected readonly dialog = inject(MatDialog);
 
     ngOnInit(): void {
@@ -37,15 +38,20 @@ export class ClientEdit implements OnInit {
         const id = this.id();
         const name = this.name();
 
-        this.errorMessage.set(null);
-
         if(!name) {
             return;
         }
 
         const client = { id, name } as Client;
-        this.clientService.saveClient(client).subscribe(() => {
-            this.dialogRef.close(true);
+        this.clientService.saveClient(client).subscribe({
+            next: () => this.dialogRef.close(true),
+            error: (err) => {this.dialog.open(DialogError, {
+                data: {
+                    title: 'Error al guardar',
+                    description: err.error?.message ?? 'No se pudo guardar el cliente.',
+                }
+            })
+            }
         });
     }
 

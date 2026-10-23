@@ -1,17 +1,18 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+
+import { validateFields } from '../../core/helpers/validation.helper';
 import { GameService } from '../game.service';
 import { Game } from '../model/game';
 import { AuthorService } from '../../author/author.service';
 import { Author } from '../../author/model/author';
 import { CategoryService } from '../../category/category.service';
 import { Category } from '../../category/model/category';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { validateFields } from '../../core/helpers/validation.helper';
 
 @Component({
     selector: 'app-game-edit',

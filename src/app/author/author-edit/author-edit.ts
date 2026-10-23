@@ -1,11 +1,12 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AuthorService } from '../author.service';
-import { Author } from '../model/author';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+
+import { AuthorService } from '../author.service';
+import { Author } from '../model/author';
 import { validateFields } from '../../core/helpers/validation.helper';
 
 @Component({

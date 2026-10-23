@@ -1,19 +1,20 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
-import {Borrowing} from '../model/borrowing';
-import { Game } from '../../game/model/game';
-import { Client } from '../../client/model/client';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { BorrowingService } from '../borrowing.service';
-import { GameService } from '../../game/game.service';
-import { ClientService } from '../../client/client.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+
 import { validateFields } from '../../core/helpers/validation.helper';
-import { DialogConfirmation } from '../../core/dialog-confirmation/dialog-confirmation';
+import { DialogError } from '../../core/dialog-error/dialog-error';
+import {Borrowing} from '../model/borrowing';
+import { Game } from '../../game/model/game';
+import { Client } from '../../client/model/client';
+import { BorrowingService } from '../borrowing.service';
+import { GameService } from '../../game/game.service';
+import { ClientService } from '../../client/client.service';
 
 @Component({
   imports: [
@@ -45,7 +46,6 @@ export class BorrowingEdit implements OnInit {
   protected readonly startDate = signal<Date | null>(null);
   protected readonly endDate = signal<Date | null>(null);
 
-  protected readonly errorMessage = signal<string | null>(null);
   protected readonly dialog = inject(MatDialog);
 
   ngOnInit(): void {
@@ -78,8 +78,6 @@ export class BorrowingEdit implements OnInit {
     const requiredFields = ["gameId", "clientId", "startDate", "endDate"] as const;
     const data = { gameId, clientId, startDate, endDate };
 
-    this.errorMessage.set(null);
-
     if (!validateFields(data, requiredFields)) {
       return;
     }
@@ -91,12 +89,13 @@ export class BorrowingEdit implements OnInit {
       startDate,
       endDate,
     } as Borrowing;
+    
     this.borrowingService.saveBorrowing(borrowing).subscribe({
       next: () => this.dialogRef.close(true),
-      error: () => this.dialog.open(DialogConfirmation, {
+      error: (err) => this.dialog.open(DialogError, {
         data: {
           title: 'Error al guardar',
-          message: 'No se pudo guardar el préstamo.',
+          description: err.error?.message ?? 'No se pudo guardar el préstamo.',
         }
       })
     });

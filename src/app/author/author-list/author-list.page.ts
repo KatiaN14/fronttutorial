@@ -2,15 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 import { AuthorEdit } from '../author-edit/author-edit';
 import { AuthorService } from '../author.service';
 import { Author } from '../model/author';
 import { Pageable } from '../../core/model/page/pageable';
 import { DialogConfirmation } from '../../core/dialog-confirmation/dialog-confirmation';
-import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { DialogError } from '../../core/dialog-error/dialog-error';
 
 @Component({
     selector: 'app-author-list',
@@ -88,8 +90,14 @@ export class AuthorListPage implements OnInit {
 
         dialogRef.afterClosed().subscribe((result) => {
             if (result) {
-                this.authorService.deleteAuthor(author.id).subscribe((result) => {
-                    this.ngOnInit();
+                this.authorService.deleteAuthor(author.id).subscribe({
+                    next: () => this.ngOnInit(),
+                    error: (err) => this.dialog.open(DialogError, {
+                        data: {
+                            title: 'Error al eliminar',
+                            description: err.error?.message ?? 'No se pudo eliminar el autor.',
+                        }
+                    })
                 });
             }
         });
