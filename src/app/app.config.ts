@@ -12,3 +12,7 @@ export const appConfig: ApplicationConfig = {
     provideNativeDateAdapter()
   ]
 };
+
+export const backendUrl = {
+  url: 'http://localhost:8080'
+};

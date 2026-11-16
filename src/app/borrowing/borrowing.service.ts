@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { Pageable } from '../core/model/page/pageable';
 import { Borrowing } from './model/borrowing';
 import { PaginatedData } from '../core/model/page/paginated-data';
+import { backendUrl } from '../app.config';
 
 @Injectable({
     providedIn: 'root',
@@ -11,7 +12,7 @@ import { PaginatedData } from '../core/model/page/paginated-data';
 export class BorrowingService {
     protected readonly http = inject(HttpClient);
 
-    private baseUrl = 'http://localhost:8080/borrowing';
+    private baseUrl = backendUrl.url + '/borrowing';
 
     getBorrowings(pageable: Pageable, gameId?: number, clientId?: number, date?: string): Observable<PaginatedData<Borrowing>> {
         return this.http.post<PaginatedData<Borrowing>>(this.composeFindUrl(gameId, clientId, date), { pageable: pageable });

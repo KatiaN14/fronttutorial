@@ -1,5 +1,9 @@
 <div class="container">
-    <h1>Crear préstamo</h1>
+    @if (id()) {
+        <h1>Modificar préstamo</h1>
+    } @else {
+        <h1>Crear préstamo</h1>
+    }
 
     <form>
         <mat-form-field>
@@ -28,15 +32,39 @@
         </mat-form-field>
 
         <mat-form-field>
-            <mat-label>Fecha de préstamo</mat-label>
-            <input type="date" matInput placeholder="Fecha de inicio de préstamo" [(ngModel)]="startDate" name="startDate" required>
-            <mat-error>La fecha de préstamo no puede estar vacía</mat-error>
+                <mat-label>Fecha de préstamo</mat-label>
+                <input matInput [matDatepicker]="myDatepickerStart" [(ngModel)]="startDate" name="startDate" required>
+                <mat-datepicker-toggle matSuffix [for]="myDatepickerStart"></mat-datepicker-toggle>
+                <mat-datepicker #myDatepickerStart></mat-datepicker>
+                <mat-error>La fecha de préstamo no puede estar vacía</mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <mat-label>Fecha de devolución</mat-label>
-            <input type="date" matInput placeholder="Fecha de devolución" [(ngModel)]="endDate" name="endDate" required>
-            <mat-error>La fecha de devolución no puede estar vacía</mat-error>
+                <mat-label>Fecha de devolución</mat-label>
+                <input matInput [matDatepicker]="myDatepickerEnd" [(ngModel)]="endDate" name="endDate" id ="endDate" required>
+                <script>
+                    console.log(startDate)
+                    $(document).ready(function() {
+                        $(function() {
+                            $("#endDate").datepicker({
+                                dateFormat: 'dd-mm-yy',
+                                beforeShowDay: my_check
+                            });
+                        });
+
+                        function my_check(in_date) {
+                            var options = getDates(startDate, startDate.addDays(14));
+                            if (in_date in options) {
+                                return [true, "av", "available"];
+                            } else {
+                                return [false, "notav", 'Not Available'];
+                            }
+                        }
+                    })
+                </script>
+                <mat-datepicker-toggle matSuffix [for]="myDatepickerEnd"></mat-datepicker-toggle>
+                <mat-datepicker #myDatepickerEnd></mat-datepicker>
+                <mat-error>La fecha de devolución no puede estar vacía</mat-error>
         </mat-form-field>
     </form>
 

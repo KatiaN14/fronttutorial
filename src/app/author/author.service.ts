@@ -5,6 +5,7 @@ import { Observable, of } from 'rxjs';
 import { Pageable } from '../core/model/page/pageable';
 import { Author } from './model/author';
 import { PaginatedData } from '../core/model/page/paginated-data';
+import { backendUrl } from '../app.config';
 
 @Injectable({
     providedIn: 'root',
@@ -12,7 +13,7 @@ import { PaginatedData } from '../core/model/page/paginated-data';
 export class AuthorService {
     protected readonly http = inject(HttpClient);
 
-    private baseUrl = 'http://localhost:8080/author';
+    private baseUrl = backendUrl.url + '/author';
 
     getAuthors(pageable: Pageable): Observable<PaginatedData<Author>> {
         return this.http.post<PaginatedData<Author>>(this.baseUrl, { pageable: pageable });

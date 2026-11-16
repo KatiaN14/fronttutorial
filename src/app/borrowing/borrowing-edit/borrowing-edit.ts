@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { validateFields } from '../../core/helpers/validation.helper';
 import { DialogError } from '../../core/dialog-error/dialog-error';
@@ -24,7 +25,8 @@ import { ClientService } from '../../client/client.service';
     ReactiveFormsModule,
     MatInputModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule, 
+    MatDatepickerModule
   ],
   standalone: true,
   selector: 'app-borrowing-edit',
