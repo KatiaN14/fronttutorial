@@ -41,27 +41,7 @@
 
         <mat-form-field>
                 <mat-label>Fecha de devolución</mat-label>
-                <input matInput [matDatepicker]="myDatepickerEnd" [(ngModel)]="endDate" name="endDate" id ="endDate" required>
-                <script>
-                    console.log(startDate)
-                    $(document).ready(function() {
-                        $(function() {
-                            $("#endDate").datepicker({
-                                dateFormat: 'dd-mm-yy',
-                                beforeShowDay: my_check
-                            });
-                        });
-
-                        function my_check(in_date) {
-                            var options = getDates(startDate, startDate.addDays(14));
-                            if (in_date in options) {
-                                return [true, "av", "available"];
-                            } else {
-                                return [false, "notav", 'Not Available'];
-                            }
-                        }
-                    })
-                </script>
+                <input matInput [matDatepicker]="myDatepickerEnd" [(ngModel)]="endDate" name="endDate" required [matDatepickerFilter]="dateFilter">
                 <mat-datepicker-toggle matSuffix [for]="myDatepickerEnd"></mat-datepicker-toggle>
                 <mat-datepicker #myDatepickerEnd></mat-datepicker>
                 <mat-error>La fecha de devolución no puede estar vacía</mat-error>

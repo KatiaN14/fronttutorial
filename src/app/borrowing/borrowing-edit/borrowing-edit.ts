@@ -106,4 +106,20 @@ export class BorrowingEdit implements OnInit {
   onClose() {
     this.dialogRef.close(false);
   }
+
+  dateFilter = (date: Date | null): boolean => {
+    const startDateValue = this.startDate();
+
+    if (!date || !this.startDate) {
+      return false;
+    }
+
+    const minDate = new Date(startDateValue);
+    minDate.setHours(0,0,0,0);
+
+    const maxDate = new Date(minDate);
+    maxDate.setDate(maxDate.getDate()+14);
+
+    return date > minDate && date <= maxDate;
+  }
 }
